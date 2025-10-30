@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio Digital - Pedidos via WhatsApp</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <h1>🍽️ Cardápio Digital</h1>
+                <p>Pedidos via WhatsApp</p>
+            </div>
+            <div class="cart-icon">
+                <button id="cart-btn" class="cart-button">
+                    <span class="cart-icon-symbol">🛒</span>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Loading Indicator -->
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Carregando cardápio...</p>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Category Filter -->
+        <div class="category-filter" id="category-filter">
+            <button class="category-btn active" data-category="todos">Todos</button>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid" id="products-grid">
+            <!-- Produtos serão inseridos aqui pelo JavaScript -->
+        </div>
+    </main>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close">&times;</button>
+            <div class="modal-body">
+                <div class="modal-image">
+                    <img id="modal-product-image" src="" alt="Produto">
+                </div>
+                <div class="modal-info">
+                    <h2 id="modal-product-name"></h2>
+                    <p id="modal-product-description" class="product-description"></p>
+                    
+                    <!-- Size Selection -->
+                    <div class="size-selection">
+                        <label>Tamanho:</label>
+                        <div id="size-options" class="size-options">
+                            <!-- Opções de tamanho serão inseridas aqui -->
+                        </div>
+                    </div>
+
+                    <!-- Quantity Selection -->
+                    <div class="quantity-selection">
+                        <label>Quantidade:</label>
+                        <div class="quantity-control">
+                            <button id="qty-minus" class="qty-btn">−</button>
+                            <input id="qty-input" type="number" value="1" min="1">
+                            <button id="qty-plus" class="qty-btn">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Price Display -->
+                    <div class="price-display">
+                        <span class="price-label">Preço:</span>
+                        <span id="modal-price" class="price-value">R$ 0,00</span>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="modal-actions">
+                        <button id="modal-cancel" class="btn btn-secondary">Cancelar</button>
+                        <button id="modal-add" class="btn btn-primary">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar hidden">
+        <div class="cart-header">
+            <h2>Seu Carrinho</h2>
+            <button class="cart-close" id="cart-close">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- Itens do carrinho serão inseridos aqui -->
+        </div>
+        <div class="cart-summary">
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span id="subtotal">R$ 0,00</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total:</span>
+                <span id="total">R$ 0,00</span>
+            </div>
+        </div>
+        <div class="cart-actions">
+            <button id="continue-shopping" class="btn btn-secondary">Continuar Comprando</button>
+            <button id="checkout-btn" class="btn btn-primary">Ir para Checkout</button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="modal hidden">
+        <div class="modal-content checkout-modal">
+            <button class="modal-close" id="checkout-close">&times;</button>
+            <div class="checkout-body">
+                <h2>Resumo do Pedido</h2>
+
+                <!-- Order Summary -->
+                <div class="order-summary">
+                    <h3>Itens do Pedido</h3>
+                    <div id="checkout-items">
+                        <!-- Itens do carrinho serão listados aqui -->
+                    </div>
+                    <div class="checkout-total">
+                        <strong>Total: <span id="checkout-total">R$ 0,00</span></strong>
+                    </div>
+                </div>
+
+                <!-- Customer Form -->
+                <form id="checkout-form" class="checkout-form">
+                    <div class="form-group">
+                        <label for="customer-name">Seu Nome *</label>
+                        <input type="text" id="customer-name" name="name" placeholder="João Silva" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customer-phone">Telefone (opcional)</label>
+                        <input type="tel" id="customer-phone" name="phone" placeholder="(11) 99999-9999">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customer-address">Endereço para Entrega (opcional)</label>
+                        <input type="text" id="customer-address" name="address" placeholder="Rua, número, bairro...">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Forma de Pagamento *</label>
+                        <div class="payment-options">
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="Cartão" required>
+                                <span>💳 Cartão</span>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="Pix">
+                                <span>📱 Pix</span>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="Dinheiro">
+                                <span>💵 Dinheiro</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="checkout-actions">
+                        <button type="button" id="checkout-back" class="btn btn-secondary">Voltar</button>
+                        <button type="submit" class="btn btn-primary btn-whatsapp">
+                            📱 Fazer Pedido via WhatsApp
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/sheets-api.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
